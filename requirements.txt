@@ -6,3 +6,6 @@ scipy
 jupyter
 transformers
 torch
+python-dotenv
+requests
+alpaca-py

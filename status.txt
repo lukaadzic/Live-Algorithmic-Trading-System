@@ -1,0 +1,17 @@
+﻿ M .gitignore
+ M README.md
+ M requirements.txt
+ M scripts/ai_sentiment_trading.py
+ M scripts/backtester.py
+ M scripts/factor_engine.py
+ M scripts/risk_metrics.py
+ M scripts/rolling_average.py
+?? .env.example
+?? notebooks/strategy_analysis.ipynb
+?? paper_trading.log
+?? paper_trading_history.csv
+?? scripts/config.py
+?? scripts/live_chart.py
+?? scripts/live_trading.py
+?? scripts/real_ai_sentiment.py
+?? status.txt

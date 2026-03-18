@@ -1,0 +1,992 @@
+﻿diff --git a/.gitignore b/.gitignore
+index 2da765f..91341d8 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -2,3 +2,6 @@ __pycache__/
+ *.py[cod]
+ *$py.class
+ .ipynb_checkpoints/
++
++# Environment configurations
++.env
+diff --git a/README.md b/README.md
+index 99776fa..1e4c0e5 100644
+--- a/README.md
++++ b/README.md
+@@ -1,21 +1,15 @@
+-# Mini Quantitative Research Project
+-
+-![Python](https://img.shields.io/badge/Python-3.10-blue)
+-![License](https://img.shields.io/badge/License-MIT-green)
+-![Project](https://img.shields.io/badge/Type-Quant%20Research-orange)
+-
+-> Mini Quantitative Research Pipeline for Developing and Backtesting Systematic Trading Strategies in Python
++# Mini Quantitative Research Pipeline for Developing, Backtesting, and Paper-Trading Systematic Strategies in Python
+ 
+ ## Table of Contents
+-
+ - [Overview](#overview)
+ - [Objectives](#objectives)
+ - [Project Structure](#project-structure)
+ - [Data Sources](#data-sources)
+ - [Implemented Modules](#implemented-modules)
+ - [Example Results](#example-results)
++- [Installation](#installation)
+ - [Usage](#usage)
+-- [Technologies](#technologies-used)
++- [Technologies Used](#technologies-used)
+ - [Future Improvements](#future-improvements)
+ - [License](#license)
+ 
+@@ -23,7 +17,7 @@
+ 
+ This repository contains a mini quantitative research pipeline for developing, testing, and analyzing systematic trading strategies using Python.
+ 
+-The project replicates key components of a typical workflow used by quantitative researchers in hedge funds and proprietary trading firms, including:
++It replicates key components of workflows commonly used by quantitative researchers in hedge funds and prop trading firms, including:
+ 
+ - Financial data collection
+ - Signal generation
+@@ -31,205 +25,165 @@ The project replicates key components of a typical workflow used by quantitative
+ - Portfolio construction
+ - Risk analysis
+ - Performance visualization
++- Real-time AI sentiment-driven trading
+ 
+-The system uses historical equity data to simulate algorithmic trading strategies and evaluate their performance using standard financial metrics.
+-
+-## Key Features
++The system can simulate trading strategies on historical data and also execute paper trading with real-time signals while logging AI-driven trades, portfolio positions, and PnL.
+ 
++### Key Features
+ - Modular research pipeline for systematic trading experiments
+ - Historical market data ingestion via yfinance
+-- Moving-average trend-following strategy
++- Moving-average trend-following strategies
+ - Factor-based portfolio allocation
+-- Strategy backtesting with performance metrics
+-- Risk analysis including maximum drawdown
+-- Sentiment-driven trading prototype using transformer models
+-- Visualization of price data, signals, and portfolio performance
++- Backtesting with cumulative returns, Sharpe ratio, and equity curves
++- Portfolio risk analysis including maximum drawdown
++- Transformer-based financial sentiment trading prototype
++- Hybrid live paper trading engine with AI overrides
++- Live plotting of equity and positions with matplotlib.animation
+ 
+ ## Objectives
+-
+-The main goals of this project are:
+-
+-- Understand the workflow of quantitative trading research
+-- Implement simple systematic trading strategies
++- Understand the end-to-end workflow of quantitative trading research
++- Implement systematic trading strategies
+ - Build a modular backtesting framework
+-- Analyze risk and performance of strategies
+-- Explore factor-based portfolio construction
+-
+-This project serves as a learning foundation for quantitative finance, algorithmic trading, and financial data analysis.
++- Analyze risk and performance metrics
++- Explore factor-based portfolio construction and AI-driven signal generation
++- Build a live paper trading simulation with both long and short positions
+ 
+ ## Project Structure
+-
+ ```text
+ quant_mini_project/
+ Γö£ΓöÇΓöÇ data/                  # stock prices, news headlines
+ Γö£ΓöÇΓöÇ plots/                 # generated charts
+-Γö£ΓöÇΓöÇ scripts/               # Python scripts for each project
+-Γö£ΓöÇΓöÇ notebooks/             # Probability puzzles
++Γö£ΓöÇΓöÇ scripts/               # Python scripts for each module
++Γö£ΓöÇΓöÇ notebooks/             # Probability puzzles and research notebooks
+ Γö£ΓöÇΓöÇ README.md
+ ΓööΓöÇΓöÇ requirements.txt
+ ```
+ 
+ ## Data Sources
++Data is sourced from Yahoo Finance via the `yfinance` Python library.
+ 
+-The project uses data from **Yahoo Finance** via the `yfinance` Python library.
+-
+-Assets used in experiments include:
++Tracked assets in experiments:
+ - Apple Inc. (AAPL)
+ - Microsoft Corporation (MSFT)
+ - Amazon.com Inc. (AMZN)
+ - NVIDIA Corporation (NVDA)
+ 
++For AI-driven sentiment trading, financial news headlines are fetched dynamically and scored with a transformer model.
++
+ ## Implemented Modules
+ 
+ ### 1. Moving Average Strategy
+-
+ Implements a basic trend-following strategy using rolling averages.
+-
+-**Features:**
+-- price vs moving average signals
+-- long/flat trading logic
+-- visualization of price and indicators
+-
+-**Script:** `scripts/rolling_average.py`  
+-**Output:** `plots/price_vs_ma.png`
++- **Features**: Price vs moving average signals, Long/flat trading logic, Visualizations of price and indicator
++- **Script**: `scripts/rolling_average.py`
++- **Output**: `plots/price_vs_ma.png`
+ 
+ ### 2. Strategy Backtesting Engine
+-
+-A lightweight backtesting engine that simulates trading performance over historical data.
+-
+-**Key metrics:**
+-- cumulative return
+-- Sharpe ratio
+-- equity curve
+-
+-**Script:** `scripts/backtester.py`  
+-**Output:** `plots/backtest_equity_curve.png`
++Simulates historical trading performance.
++- **Metrics**: Cumulative returns, Sharpe ratio, Equity curve visualization
++- **Script**: `scripts/backtester.py`
++- **Output**: `plots/backtest_equity_curve.png`
+ 
+ ### 3. Factor Portfolio Engine
+-
+-Implements a simple factor-based portfolio strategy, allocating capital across assets based on signals. 
+-
+-This module explores the idea behind factor investing, commonly used in quantitative asset management.
+-
+-**Script:** `scripts/factor_engine.py`  
+-**Output:** `plots/factor_portfolio.png`
++Allocates capital across multiple assets using factor signals.
++- **Script**: `scripts/factor_engine.py`
++- **Output**: `plots/factor_portfolio.png`
+ 
+ ### 4. Risk Metrics Analysis
+-
+-Calculates important portfolio risk statistics including:
+-- cumulative returns
+-- maximum drawdown
+-- portfolio risk profile
+-
+-**Script:** `scripts/risk_metrics.py`  
+-**Output:** `plots/cumulative_vs_drawdown.png`
++Calculates portfolio risk statistics:
++- **Metrics**: Cumulative returns, Maximum drawdown, Risk profile over time
++- **Script**: `scripts/risk_metrics.py`
++- **Output**: `plots/cumulative_vs_drawdown.png`
+ 
+ ### 5. AI Sentiment Trading Prototype
+-
+-A prototype experiment combining news sentiment analysis with trading signals. 
+-
+-The script uses a transformer-based sentiment model from Hugging Face to score financial headlines and simulate a sentiment-driven trading strategy.
+-
+-**Script:** `scripts/ai_sentiment_trading.py`  
+-**Output:** `plots/sentiment_strategy.png`
+-
+-## Strategy Visualization
+-
+-### Moving Average Strategy
+-![Moving Average Strategy](plots/price_vs_ma.png)
+-
+-### Backtest Equity Curve
+-![Backtest](plots/backtest_equity_curve.png)
+-
+-### Portfolio Drawdown
+-![Drawdown](plots/cumulative_vs_drawdown.png)
++Prototype combining news sentiment analysis with trading signals.
++- **Features**: Transformer-based sentiment scoring for financial headlines, Generation of daily signals (BULLISH, BEARISH, NEUTRAL), Extraction of top headlines driving the signal
++- **Script**: `scripts/real_ai_sentiment.py`
++- **Output**: Dataframe of sentiment signals and top headlines
++
++### 6. Paper Trading / Live Signal Execution
++Live simulation with long and short execution, integrating AI sentiment signals.
++- **Features**: Real-time Alpaca Paper Trading API integration, AI sentiment overrides technical strategies, Automatic logging of top headlines for trades, Position size tracking for long/short reversals, Live equity tracking
++- **Script**: `scripts/live_trading.py`
++- **Output**: Console logs and `paper_trading.log` with PnL
++
++### 7. Live Equity Visualization
++Real-time equity curve plotting using `matplotlib.animation`.
++- **Features**: Reads paper trading CSV every 10 seconds, Updates portfolio equity, PnL, and positions dynamically, Works alongside `live_trading.py` for cockpit-like monitoring
++- **Script**: `scripts/live_chart.py`
++- **Output**: Live matplotlib window
+ 
+ ## Example Results
+ 
+-Example output from the backtest:
+-
+-- **Sharpe Ratio (Net):** 0.19
+-- **Maximum Drawdown:** -40%
++Example AI-driven trades during a live paper trading run:
++- **AAPL**: BULLISH ΓåÆ Long 1 share
++- **MSFT, AMZN, NVDA**: BEARISH ΓåÆ Short 1 share each
++- **Global PnL**: +$0.76 within first few ticks
+ 
+-These results illustrate that simple strategies often produce modest performance and can experience significant drawdowns, highlighting the importance of risk management and strategy refinement in quantitative trading systems.
++The system correctly tracked long and short positions, logged top headlines, and reflected market moves in equity dynamically.
+ 
+ ## Installation
+ 
+ Clone the repository:
+-
+ ```bash
+ git clone https://github.com/markopom/quant_mini_project.git
+ cd quant_mini_project
+ ```
+ 
+ Install dependencies:
+-
+ ```bash
+ pip install -r requirements.txt
+ ```
+ 
+ ## Usage
+-
+ ```bash
+ # Run strategy modules
+ python scripts/rolling_average.py
+ python scripts/factor_engine.py
++python scripts/backtester.py
++
++# Run AI sentiment trading prototype
++python scripts/real_ai_sentiment.py
+ 
+-# Run probability puzzles notebook
++# Run live paper trading (requires Alpaca API keys in .env)
++python scripts/live_trading.py
++
++# Open a live equity chart dashboard
++python scripts/live_chart.py
++
++# Explore probability puzzles
+ jupyter notebook notebooks/probability_puzzles.ipynb
+ ```
+ 
+ ## Technologies Used
+-
+-- Python
+-- pandas
+-- numpy
+-- matplotlib
+-- yfinance
+-- transformers
+-- machine learning models for sentiment analysis
++- **Python 3.10**
++- **pandas, numpy, matplotlib**
++- **yfinance**
++- **transformers** (Hugging Face)
++- **Alpaca Paper Trading API**
++- Logging, CSV tracking, and live plotting
+ 
+ ## Future Improvements
++### Realistic Trading
++- Incorporate transaction costs, slippage, and bid-ask spreads
++- Extend risk modeling to leverage and margin
+ 
+-Several extensions could further improve the realism and robustness of the research pipeline:
++### Advanced Validation
++- Walk-forward testing for strategy robustness
++- Benchmark comparisons (buy-and-hold, equal-weighted portfolio, market index)
+ 
+-### Transaction Cost Modeling
+-Current backtests assume frictionless trading. Future versions will incorporate:
+-
+-- transaction costs
+-- bid-ask spread simulation
+-- slippage modeling
+-
+-This will allow a more realistic evaluation of trading strategies.
+-
+-### Walk-Forward Validation
+-To reduce overfitting risk, the research pipeline could be extended with walk-forward testing:
+-
+-- train strategy on historical period
+-- evaluate on unseen out-of-sample data
+-
+-### Benchmark Comparison
+-Strategy performance can be compared against benchmark portfolios such as:
+-
+-- buy-and-hold strategy
+-- equal-weighted portfolio
+-- market index benchmarks
+-
+-This would provide clearer evaluation of strategy performance relative to the market.
+-
+-### Advanced Research Extensions
+-Additional research directions include:
+-
+-- multi-factor portfolio models
+-- volatility targeting
+-- reinforcement learning trading strategies
+-- high-frequency market microstructure analysis
+-- sentiment analysis using real financial news datasets
++### AI & Quant Enhancements
++- Multi-factor portfolio models
++- Reinforcement learning strategies
++- AI-sentiment driven pair trading and hedging
++- Volatility-targeted position sizing
+ 
+ ## Educational Purpose
+-
+-This project was built as a learning exercise in quantitative finance and algorithmic trading. It demonstrates how financial data can be transformed into trading signals and evaluated through systematic backtesting.
++This project is a learning exercise demonstrating:
++- Transforming financial data into trading signals
++- Evaluating systematic strategies
++- Integrating AI sentiment for live paper trading
++- Risk-aware long and short execution
+ 
+ ## License
+-
+-This project is released under the MIT License.
++MIT License
+diff --git a/requirements.txt b/requirements.txt
+index 600d3f7..1dceb71 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -6,3 +6,6 @@ scipy
+ jupyter
+ transformers
+ torch
++python-dotenv
++requests
++alpaca-py
+diff --git a/scripts/ai_sentiment_trading.py b/scripts/ai_sentiment_trading.py
+index b1c1bd2..e06995e 100644
+--- a/scripts/ai_sentiment_trading.py
++++ b/scripts/ai_sentiment_trading.py
+@@ -1,8 +1,10 @@
+-import pandas as pd
+-import numpy as np
++import os
++
+ import matplotlib.pyplot as plt
++import numpy as np
++import pandas as pd
+ from transformers import pipeline
+-import os
++
+ 
+ def mock_news_data(dates, tickers):
+     # Mock headlines
+@@ -15,76 +17,86 @@ def mock_news_data(dates, tickers):
+         "Analysts upgrade stock to strong buy.",
+         "Global market selloff drags down shares.",
+         "Company acquires promising startup.",
+-        "Earnings miss expectations, stock plunges."
++        "Earnings miss expectations, stock plunges.",
+     ]
+-    
++
+     np.random.seed(42)
+     news_list = []
+-    
++
+     for date in dates:
+         for ticker in tickers:
+-            if np.random.random() > 0.8:  # 20% chance of news on a given day for a ticker
++            if (
++                np.random.random() > 0.8
++            ):  # 20% chance of news on a given day for a ticker
+                 headline = np.random.choice(headlines)
+-                news_list.append({'Date': date, 'Ticker': ticker, 'Headline': headline})
+-                
++                news_list.append({"Date": date, "Ticker": ticker, "Headline": headline})
++
+     return pd.DataFrame(news_list)
+ 
++
+ def main():
+-    os.makedirs('plots', exist_ok=True)
+-    
+-    if not os.path.exists('data/historical_prices.csv'):
++    os.makedirs("plots", exist_ok=True)
++
++    if not os.path.exists("data/historical_prices.csv"):
+         print("Data not found. Run rolling_average.py first.")
+         return
+-        
+-    prices = pd.read_csv('data/historical_prices.csv', index_col=0, parse_dates=True)
+-    
++
++    prices = pd.read_csv("data/historical_prices.csv", index_col=0, parse_dates=True)
++
+     # We will test on just one ticker to make the plot clean, preferably AAPL
+-    ticker = 'AAPL' if 'AAPL' in prices.columns else prices.columns[0]
++    ticker = "AAPL" if "AAPL" in prices.columns else prices.columns[0]
+     stock_prices = prices[[ticker]].dropna()
+     stock_returns = stock_prices.pct_change().dropna()
+-    
++
+     print(f"Generating mock news for {ticker}...")
+     news_df = mock_news_data(stock_returns.index, [ticker])
+-    
++
+     print("Loading sentiment model...")
+     # Setting device to -1 uses CPU, 0 uses GPU. CPU is safer.
+     sentiment_pipeline = pipeline("sentiment-analysis", device=-1)
+-    
++
+     print("Scoring headlines (mock LLM inference)...")
+     sentiments = []
+-    for headline in news_df['Headline']:
++    for headline in news_df["Headline"]:
+         result = sentiment_pipeline(headline)[0]
+-        score = result['score'] if result['label'] == 'POSITIVE' else -result['score']
++        score = result["score"] if result["label"] == "POSITIVE" else -result["score"]
+         sentiments.append(score)
+-        
+-    news_df['Sentiment_Score'] = sentiments
+-    daily_sentiment = news_df.groupby('Date')['Sentiment_Score'].mean()
++
++    news_df["Sentiment_Score"] = sentiments
++    daily_sentiment = news_df.groupby("Date")["Sentiment_Score"].mean()
+     daily_sentiment = daily_sentiment.reindex(stock_returns.index).fillna(0)
+-    
++
+     # Generate signal
+     signal = pd.Series(0, index=daily_sentiment.index, dtype=float)
+-    signal[daily_sentiment > 0.3] = 1.0   # Go Long if positive sentiment
+-    signal[daily_sentiment < -0.3] = -1.0 # Go Short if negative sentiment
+-    
++    signal[daily_sentiment > 0.3] = 1.0  # Go Long if positive sentiment
++    signal[daily_sentiment < -0.3] = -1.0  # Go Short if negative sentiment
++
+     # Shift to trade T+1 open based on day T close/news
+     signal = signal.shift(1).fillna(0)
+-    
++
+     # Backtest
+     strategy_returns = signal * stock_returns[ticker]
+     cum_strategy = (1 + strategy_returns).cumprod()
+     cum_stock = (1 + stock_returns[ticker]).cumprod()
+-    
++
+     plt.figure(figsize=(12, 6))
+-    plt.plot(cum_strategy.index, cum_strategy, label='Sentiment Strategy', color='blue')
+-    plt.plot(cum_stock.index, cum_stock, label=f'{ticker} Buy & Hold', color='gray', linestyle='--')
+-    
+-    plt.title(f'AI Sentiment Trading Strategy ({ticker})')
+-    plt.xlabel('Date')
+-    plt.ylabel('Cumulative Return')
++    plt.plot(cum_strategy.index, cum_strategy, label="Sentiment Strategy", color="blue")
++    plt.plot(
++        cum_stock.index,
++        cum_stock,
++        label=f"{ticker} Buy & Hold",
++        color="gray",
++        linestyle="--",
++    )
++
++    plt.title(f"AI Sentiment Trading Strategy ({ticker})")
++    plt.xlabel("Date")
++    plt.ylabel("Cumulative Return")
+     plt.legend()
+     plt.grid(True)
+-    plt.savefig('plots/sentiment_strategy.png')
++    plt.savefig("plots/sentiment_strategy.png")
+     print("Saved plot to plots/sentiment_strategy.png")
+ 
++
+ if __name__ == "__main__":
+     main()
+diff --git a/scripts/backtester.py b/scripts/backtester.py
+index aa66c34..c568333 100644
+--- a/scripts/backtester.py
++++ b/scripts/backtester.py
+@@ -1,8 +1,10 @@
+-import pandas as pd
+-import numpy as np
+-import matplotlib.pyplot as plt
+ import os
+ 
++import matplotlib.pyplot as plt
++import numpy as np
++import pandas as pd
++
++
+ class SimpleBacktester:
+     def __init__(self, prices, target_weights, transaction_cost=0.001):
+         """
+@@ -14,74 +16,94 @@ class SimpleBacktester:
+         self.returns = prices.pct_change().dropna()
+         self.target_weights = target_weights
+         self.tc = transaction_cost
+-        
++
+     def run(self):
+         common_dates = self.returns.index.intersection(self.target_weights.index)
+         returns = self.returns.loc[common_dates]
+         target_weights = self.target_weights.loc[common_dates]
+-        
++
+         # Shift weights to execute at day T+1 open (approx day T+1 return)
+         weights = target_weights.shift(1).dropna()
+         returns = returns.loc[weights.index]
+-        
++
+         gross_returns = (weights * returns).sum(axis=1)
+-        
++
+         weight_changes = weights.diff().abs()
+         weight_changes.iloc[0] = weights.iloc[0].abs()
+-        
+-        costs = (weight_changes.sum(axis=1) * self.tc)
++
++        costs = weight_changes.sum(axis=1) * self.tc
+         net_returns = gross_returns - costs
+-        
+-        self.results = pd.DataFrame({
+-            'Gross_Return': gross_returns,
+-            'Net_Return': net_returns,
+-            'Cumulative_Gross': (1 + gross_returns).cumprod(),
+-            'Cumulative_Net': (1 + net_returns).cumprod()
+-        })
+-        
+-        sharpe = (net_returns.mean() / net_returns.std()) * np.sqrt(252) if net_returns.std() > 0 else 0
++
++        self.results = pd.DataFrame(
++            {
++                "Gross_Return": gross_returns,
++                "Net_Return": net_returns,
++                "Cumulative_Gross": (1 + gross_returns).cumprod(),
++                "Cumulative_Net": (1 + net_returns).cumprod(),
++            }
++        )
++
++        sharpe = (
++            (net_returns.mean() / net_returns.std()) * np.sqrt(252)
++            if net_returns.std() > 0
++            else 0
++        )
+         print(f"Backtest Completed. Sharpe Ratio (Net): {sharpe:.2f}")
+         return self.results
+-        
++
+     def plot(self, save_path):
+         plt.figure(figsize=(10, 6))
+-        plt.plot(self.results.index, self.results['Cumulative_Gross'], label='Gross Returns', color='green')
+-        plt.plot(self.results.index, self.results['Cumulative_Net'], label='Net Returns', color='blue')
+-        plt.title('Backtest Equity Curve')
+-        plt.xlabel('Date')
+-        plt.ylabel('Cumulative Return')
++        plt.plot(
++            self.results.index,
++            self.results["Cumulative_Gross"],
++            label="Gross Returns",
++            color="green",
++        )
++        plt.plot(
++            self.results.index,
++            self.results["Cumulative_Net"],
++            label="Net Returns",
++            color="blue",
++        )
++        plt.title("Backtest Equity Curve")
++        plt.xlabel("Date")
++        plt.ylabel("Cumulative Return")
+         plt.legend()
+         plt.grid(True)
+         plt.savefig(save_path)
+         print(f"Saved plot to {save_path}")
+ 
++
+ def main():
+-    os.makedirs('plots', exist_ok=True)
+-    
+-    if not os.path.exists('data/historical_prices.csv'):
++    os.makedirs("plots", exist_ok=True)
++
++    if not os.path.exists("data/historical_prices.csv"):
+         print("Data not found. Run rolling_average.py first.")
+         return
+-        
+-    prices = pd.read_csv('data/historical_prices.csv', index_col=0, parse_dates=True)
+-    
++
++    prices = pd.read_csv("data/historical_prices.csv", index_col=0, parse_dates=True)
++
+     # Signal: fast VS slow MA
+     ma20 = prices.rolling(20).mean()
+     ma50 = prices.rolling(50).mean()
+-    
++
+     # 1 if MA20 > MA50 else 0
+     signal = (ma20 > ma50).astype(float)
+-    
++
+     # Equal weight allocation among assets with positive signal
+     row_sums = signal.sum(axis=1)
+-    weights = signal.div(row_sums.replace(0, 1), axis=0) # replace 0 to avoid division by zero
++    weights = signal.div(
++        row_sums.replace(0, 1), axis=0
++    )  # replace 0 to avoid division by zero
+     weights[row_sums == 0] = 0
+     weights = weights.fillna(0)
+-    
++
+     tester = SimpleBacktester(prices, weights, transaction_cost=0.002)
+     results = tester.run()
+-    
+-    results.to_csv('data/backtest_results.csv')
+-    tester.plot('plots/backtest_equity_curve.png')
++
++    results.to_csv("data/backtest_results.csv")
++    tester.plot("plots/backtest_equity_curve.png")
++
+ 
+ if __name__ == "__main__":
+     main()
+diff --git a/scripts/factor_engine.py b/scripts/factor_engine.py
+index 90fd1ed..832b6dc 100644
+--- a/scripts/factor_engine.py
++++ b/scripts/factor_engine.py
+@@ -1,82 +1,91 @@
+-import pandas as pd
+-import numpy as np
+-import matplotlib.pyplot as plt
+ import os
+ 
++import matplotlib.pyplot as plt
++import numpy as np
++import pandas as pd
++
++
+ def load_data(filepath):
+     return pd.read_csv(filepath, index_col=0, parse_dates=True)
+ 
++
+ def main():
+-    os.makedirs('plots', exist_ok=True)
+-    
+-    if not os.path.exists('data/historical_prices.csv'):
++    os.makedirs("plots", exist_ok=True)
++
++    if not os.path.exists("data/historical_prices.csv"):
+         print("Data not found. Run rolling_average.py first.")
+         return
+-        
+-    prices = load_data('data/historical_prices.csv')
++
++    prices = load_data("data/historical_prices.csv")
+     returns = prices.pct_change().dropna()
+-    
++
+     # 1. Momentum (90-day return)
+     momentum = prices.pct_change(periods=90).dropna()
+-    
++
+     # 2. Volatility (30-day rolling std)
+     volatility = returns.rolling(window=30).std() * np.sqrt(252)
+     volatility = volatility.dropna()
+-    
++
+     # Align dates
+     common_dates = momentum.index.intersection(volatility.index)
+     momentum = momentum.loc[common_dates]
+     volatility = volatility.loc[common_dates]
+     returns = returns.loc[common_dates]
+-    
++
+     # 3. Rank stocks (higher momentum is better, lower volatility is better)
+     # Convert parameters to cross-sectional Z-scores so they're comparable
+     z_mom = (momentum.T - momentum.mean(axis=1)) / (momentum.std(axis=1) + 1e-8)
+     z_mom = z_mom.T
+-    
++
+     z_vol = -(volatility.T - volatility.mean(axis=1)) / (volatility.std(axis=1) + 1e-8)
+     z_vol = z_vol.T
+-    
++
+     # Combined factor score (equal weight)
+     factor_score = (z_mom + z_vol) / 2
+     factor_score = factor_score.fillna(0)
+-    
++
+     # 4. Pick top 2 stocks each period
+     # Rank 1 is best, 4 is worst
+     ranks = factor_score.rank(axis=1, ascending=False)
+-    
++
+     # Select stocks with rank <= 2
+     portfolio_weights = (ranks <= 2).astype(float)
+     # Normalize weights
+-    portfolio_weights = portfolio_weights.div(portfolio_weights.sum(axis=1).replace(0, 1), axis=0)
+-    
++    portfolio_weights = portfolio_weights.div(
++        portfolio_weights.sum(axis=1).replace(0, 1), axis=0
++    )
++
+     # Shift weights by 1 day because we compute signals on day T, use for day T+1 returns
+     portfolio_weights = portfolio_weights.shift(1).dropna()
+-    
++
+     # Compute strategy returns
+-    strategy_returns = (portfolio_weights * returns.loc[portfolio_weights.index]).sum(axis=1)
++    strategy_returns = (portfolio_weights * returns.loc[portfolio_weights.index]).sum(
++        axis=1
++    )
+     baseline_returns = returns.loc[portfolio_weights.index].mean(axis=1)
+-    
++
+     cum_strategy = (1 + strategy_returns).cumprod()
+     cum_baseline = (1 + baseline_returns).cumprod()
+-    
+-    results_df = pd.DataFrame({
+-        'Factor_Strategy': strategy_returns,
+-        'Baseline_EqualWeight': baseline_returns
+-    })
+-    results_df.to_csv('data/factor_portfolio.csv')
+-    
++
++    results_df = pd.DataFrame(
++        {"Factor_Strategy": strategy_returns, "Baseline_EqualWeight": baseline_returns}
++    )
++    results_df.to_csv("data/factor_portfolio.csv")
++
+     # Plot
+     plt.figure(figsize=(10, 6))
+-    plt.plot(cum_strategy.index, cum_strategy, label='Factor Strategy', color='blue')
+-    plt.plot(cum_baseline.index, cum_baseline, label='Baseline', color='gray', linestyle='--')
+-    plt.title('Factor Portfolio Cumulative Returns')
+-    plt.xlabel('Date')
+-    plt.ylabel('Cumulative Return')
++    plt.plot(cum_strategy.index, cum_strategy, label="Factor Strategy", color="blue")
++    plt.plot(
++        cum_baseline.index, cum_baseline, label="Baseline", color="gray", linestyle="--"
++    )
++    plt.title("Factor Portfolio Cumulative Returns")
++    plt.xlabel("Date")
++    plt.ylabel("Cumulative Return")
+     plt.legend()
+     plt.grid(True)
+-    plt.savefig('plots/factor_portfolio.png')
++    plt.savefig("plots/factor_portfolio.png")
+     print("Saved plot to plots/factor_portfolio.png")
+ 
++
+ if __name__ == "__main__":
+     main()
+diff --git a/scripts/risk_metrics.py b/scripts/risk_metrics.py
+index 1850fbc..c41e843 100644
+--- a/scripts/risk_metrics.py
++++ b/scripts/risk_metrics.py
+@@ -1,73 +1,87 @@
+-import pandas as pd
+-import numpy as np
+-import matplotlib.pyplot as plt
+ import os
+ 
++import matplotlib.pyplot as plt
++import numpy as np
++import pandas as pd
++
++
+ def load_data(filepath):
+     df = pd.read_csv(filepath, index_col=0, parse_dates=True)
+     return df
+ 
++
+ def calculate_returns(prices):
+     return prices.pct_change().dropna()
+ 
++
+ def calculate_rolling_volatility(returns, window=30):
+     # Annualized rolling volatility (assuming 252 trading days)
+     return returns.rolling(window=window).std() * np.sqrt(252)
+ 
++
+ def calculate_max_drawdown(returns):
+     cumulative = (1 + returns).cumprod()
+     rolling_max = cumulative.cummax()
+     drawdown = (cumulative - rolling_max) / rolling_max
+     return cumulative, drawdown
+ 
++
+ def main():
+-    os.makedirs('plots', exist_ok=True)
+-    
+-    if not os.path.exists('data/historical_prices.csv'):
++    os.makedirs("plots", exist_ok=True)
++
++    if not os.path.exists("data/historical_prices.csv"):
+         print("Data not found. Please run rolling_average.py first to fetch data.")
+         return
+-        
+-    prices = load_data('data/historical_prices.csv')
+-    
++
++    prices = load_data("data/historical_prices.csv")
++
+     # Calculate daily returns for each asset, then create an equally-weighted portfolio
+     asset_returns = calculate_returns(prices)
+     portfolio_returns = asset_returns.mean(axis=1)
+-    
++
+     volatility = calculate_rolling_volatility(portfolio_returns, window=30)
+     cumulative_returns, drawdown = calculate_max_drawdown(portfolio_returns)
+-    
++
+     max_dd = drawdown.min()
+     print(f"Maximum Drawdown of EW Portfolio: {max_dd:.2%}")
+-    
++
+     # Save metrics
+-    metrics = pd.DataFrame({
+-        'Portfolio_Returns': portfolio_returns,
+-        'Rolling_Volatility_30d': volatility,
+-        'Cumulative_Returns': cumulative_returns,
+-        'Drawdown': drawdown
+-    })
+-    metrics.to_csv('data/risk_metrics.csv')
+-    
++    metrics = pd.DataFrame(
++        {
++            "Portfolio_Returns": portfolio_returns,
++            "Rolling_Volatility_30d": volatility,
++            "Cumulative_Returns": cumulative_returns,
++            "Drawdown": drawdown,
++        }
++    )
++    metrics.to_csv("data/risk_metrics.csv")
++
+     # Plotting
+     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
+-    
+-    ax1.plot(cumulative_returns.index, cumulative_returns, label='Cumulative Returns', color='green')
+-    ax1.set_title('Equal-Weighted Portfolio Cumulative Returns')
+-    ax1.set_ylabel('Growth Factor')
++
++    ax1.plot(
++        cumulative_returns.index,
++        cumulative_returns,
++        label="Cumulative Returns",
++        color="green",
++    )
++    ax1.set_title("Equal-Weighted Portfolio Cumulative Returns")
++    ax1.set_ylabel("Growth Factor")
+     ax1.legend()
+     ax1.grid(True)
+-    
+-    ax2.plot(drawdown.index, drawdown, label='Drawdown', color='red')
+-    ax2.fill_between(drawdown.index, drawdown, 0, alpha=0.3, color='red')
+-    ax2.set_title('Portfolio Drawdown')
+-    ax2.set_xlabel('Date')
+-    ax2.set_ylabel('Drawdown (%)')
++
++    ax2.plot(drawdown.index, drawdown, label="Drawdown", color="red")
++    ax2.fill_between(drawdown.index, drawdown, 0, alpha=0.3, color="red")
++    ax2.set_title("Portfolio Drawdown")
++    ax2.set_xlabel("Date")
++    ax2.set_ylabel("Drawdown (%)")
+     ax2.legend()
+     ax2.grid(True)
+-    
++
+     plt.tight_layout()
+-    plt.savefig('plots/cumulative_vs_drawdown.png')
++    plt.savefig("plots/cumulative_vs_drawdown.png")
+     print("Saved plot to plots/cumulative_vs_drawdown.png")
+ 
++
+ if __name__ == "__main__":
+     main()
+diff --git a/scripts/rolling_average.py b/scripts/rolling_average.py
+index d50fc28..b6a2d2e 100644
+--- a/scripts/rolling_average.py
++++ b/scripts/rolling_average.py
+@@ -1,59 +1,64 @@
+-import yfinance as yf
+-import pandas as pd
+-import matplotlib.pyplot as plt
+ import os
+ 
++import matplotlib.pyplot as plt
++import pandas as pd
++import yfinance as yf
++
++
+ def fetch_data(tickers, start_date, end_date):
+     print(f"Fetching data for {tickers}...")
+     # `auto_adjust=False` avoids some yfinance warnings/issues across versions if Close vs Adj Close
+     df = yf.download(tickers, start=start_date, end=end_date)
+     # yfinance often returns a MultiIndex if multiple tickers. Let's handle safely.
+     if isinstance(df.columns, pd.MultiIndex):
+-        if 'Close' in df.columns.levels[0]:
+-            df = df['Close']
+-        elif 'Price' in df.columns.names:
+-            df = df.xs('Close', level='Price', axis=1)
+-    
++        if "Close" in df.columns.levels[0]:
++            df = df["Close"]
++        elif "Price" in df.columns.names:
++            df = df.xs("Close", level="Price", axis=1)
++
+     # If a single ticker was passed, 'Close' is just a column, but here we have multiple
+-    if 'Close' in df.columns and not isinstance(df.columns, pd.MultiIndex):
++    if "Close" in df.columns and not isinstance(df.columns, pd.MultiIndex):
+         # Fallback if download returned flat for some reason
+-        df = df[['Close']]
++        df = df[["Close"]]
+     return df
+ 
++
+ def calculate_rolling_average(data, window=30):
+     return data.rolling(window=window).mean()
+ 
++
+ def main():
+     # Setup directories
+-    os.makedirs('data', exist_ok=True)
+-    os.makedirs('plots', exist_ok=True)
+-    
+-    tickers = ['AAPL', 'MSFT', 'AMZN', 'NVDA']
++    os.makedirs("data", exist_ok=True)
++    os.makedirs("plots", exist_ok=True)
++
++    tickers = ["AAPL", "MSFT", "AMZN", "NVDA"]
+     # Download 2 years of data
+-    df = fetch_data(tickers, '2022-01-01', '2024-01-01')
+-    
++    df = fetch_data(tickers, "2022-01-01", "2024-01-01")
++
+     # Calculate rolling averages
+     ma_df = pd.DataFrame()
+     for col in df.columns:
+         ma_df[col] = calculate_rolling_average(df[col], window=50)
+-        
++
+     # Save to CSV
+-    df.to_csv('data/historical_prices.csv')
+-    ma_df.to_csv('data/rolling_averages.csv')
+-    
++    df.to_csv("data/historical_prices.csv")
++    ma_df.to_csv("data/rolling_averages.csv")
++
+     # Plotting AAPL as an example
+     plt.figure(figsize=(10, 6))
+-    if 'AAPL' in df.columns:
+-        plt.plot(df.index, df['AAPL'], label='AAPL Price', color='blue')
+-        plt.plot(df.index, ma_df['AAPL'], label='AAPL 50-Day MA', color='orange')
+-    plt.title('AAPL Price vs 50-Day Rolling Average')
+-    plt.xlabel('Date')
+-    plt.ylabel('Price (USD)')
++    if "AAPL" in df.columns:
++        plt.plot(df.index, df["AAPL"], label="AAPL Price", color="blue")
++        plt.plot(df.index, ma_df["AAPL"], label="AAPL 50-Day MA", color="orange")
++    plt.title("AAPL Price vs 50-Day Rolling Average")
++    plt.xlabel("Date")
++    plt.ylabel("Price (USD)")
+     plt.legend()
+     plt.grid(True)
+-    
+-    plt.savefig('plots/price_vs_ma.png')
++
++    plt.savefig("plots/price_vs_ma.png")
+     print("Saved plot to plots/price_vs_ma.png")
+ 
++
+ if __name__ == "__main__":
+     main()
